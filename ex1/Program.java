@@ -21,5 +21,6 @@ public class  Program {
 			}
 		}
 		System.out.println("True " +  (i - 1));
+		sc.close();
 	}
 }
