@@ -18,7 +18,7 @@ class Program {
 				break ;
 			if(!week.equals("week " + iteration))
 			{
-				System.out.println("IllegalArgument");
+				System.err.println("IllegalArgument");
 				System.exit(-1);
 			}
 			minOfEachWeek = 10;
@@ -27,7 +27,7 @@ class Program {
 				number = sc.nextInt();
 				if (number > 9 || number <= 0)
 				{
-					System.out.println("IllegalNumber");
+					System.err.println("IllegalNumber");
 					System.exit(-1);
 				}
 				if (number < minOfEachWeek)
@@ -46,7 +46,7 @@ class Program {
 		statisticReverse /= 10;
 		iteration = 1;
 		while (statisticReverse > 0) {
-			System.err.print("week " + iteration++);
+			System.out.print("week " + iteration++);
 			nb = statisticReverse % 10;
 			while (nb > 0) {
 				System.out.print("=");
