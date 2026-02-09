@@ -18,7 +18,6 @@ public class Program {
 			}
 		}
 		arr[j] = 0;
-		System.out.println((char)charac[index]);
 		return max;
 	}
 
@@ -36,8 +35,8 @@ public class Program {
 			arr[c]++;
 		for (int i = 0; i < 10; i++)
 			maxes[i] = max(arr, charac, i);
-		// for (int i = 0; i < 10; i++)
-		// 	System.out.println((char)charac[i]);
+		for (int i = 0; i < 10; i++)
+			System.out.println((char)charac[i]);
 
 		scanner.close();
 	}
