@@ -36,6 +36,14 @@ public class Program {
 		for (int i = 0; i < 10; i++)
 			maxes[i] = max(arr, charac, i);
 		for (int i = 0; i < 10; i++)
+		{
+			if (maxes[0] == maxes[i])
+				matrix[0][i] = maxes[0];
+			else
+				break;
+		}
+		
+		for (int i = 0; i < 10; i++)
 			System.out.println((char)charac[i]);
 
 		scanner.close();
