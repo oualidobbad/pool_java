@@ -4,46 +4,41 @@ import java.util.Scanner;
 
 public class Program {
 
-	static int max(int[] arr){
+	static int max(int[] arr, int charac[], int index){
 		int max = 0;
+		int j = 0;
 
 		for (int i = 0; i < 65535; i++)
 		{
 			if (arr[i] != 0 && max < arr[i])
 			{
+				charac[index] = i;
 				max = arr[i];
-				arr[i] = 0;
+				j = i;
 			}
 		}
+		arr[j] = 0;
+		System.out.println((char)charac[index]);
 		return max;
 	}
 
 	public static void main (String[]args){
 		int[]arr = new int[65535];
+		int [][] matrix = new int[12][10];
 		Scanner scanner = new Scanner(System.in);
 		String line = scanner.nextLine();
 		char [] caracaters = line.toCharArray();
-		int barr = 10;
-		int maxCount;
-		int max;
+		int maxes[] = new int[10];
+		int charac[] = new int [10];
+		// int max;
 
 		for (char c : caracaters)
 			arr[c]++;
-		maxCount = max(arr);
-		max = maxCount;
-		for (int i = 0; i < 9; i++)
-		{
-			int scaledHeight = (max * 10) / maxCount;
-			for (int j = 10; j > 0; j--)
-			{
-				if (scaledHeight >= j)
-					System.out.print("#");
-				else
-					System.out.print(" ");
-			}
-			System.out.println();
-			max = max(arr);
-		}
+		for (int i = 0; i < 10; i++)
+			maxes[i] = max(arr, charac, i);
+		// for (int i = 0; i < 10; i++)
+		// 	System.out.println((char)charac[i]);
+
 		scanner.close();
 	}
 }
