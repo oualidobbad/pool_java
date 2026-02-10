@@ -24,17 +24,14 @@ public class Program {
         Scanner scanner = new Scanner(System.in);
         String line = scanner.nextLine();
         char[] characters = line.toCharArray();
-
         int[] maxes = new int[10];
         int[] charac = new int[10];
 
-        for (char c : characters) {
+        for (char c : characters)
             arr[c]++;
-        }
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 10; i++)
             maxes[i] = max(arr, charac, i);
-        }
 
         if (maxes[0] == 0) {
             scanner.close();
