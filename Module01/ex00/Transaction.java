@@ -7,7 +7,7 @@ enum TransferCategory {
     CREDIT //Money IN
 };;
 
-class Transaction {
+public class Transaction {
 	private UUID identifier;
 	private User recipient;
 	private User sender;
