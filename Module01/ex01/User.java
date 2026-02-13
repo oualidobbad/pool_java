@@ -1,6 +1,6 @@
 package Module01.ex01;
 
-class User {
+public class User {
     private final Integer identifier; 
     private final String name;
     private Integer balance;

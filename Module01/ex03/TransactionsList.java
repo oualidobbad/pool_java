@@ -1,7 +1,6 @@
 package Module01.ex03;
 import java.util.UUID;
 
-import Module01.ex00.Transaction;
 
 public interface TransactionsList {
 

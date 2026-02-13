@@ -1,8 +1,6 @@
 package Module01.ex03;
 import java.util.UUID;
 
-import Module01.ex00.Transaction;
-
 public class TransactionsLinkedList implements	TransactionsList {
 	
 	private List head;
@@ -48,6 +46,8 @@ public class TransactionsLinkedList implements	TransactionsList {
 	public void deleteTransaction(UUID id){
 		List curreNode;
 
+		if (id == null)
+			return ;
 		if (head == null)
 			return ;
 		size--;
