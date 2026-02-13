@@ -1,37 +1,30 @@
 package Module01.ex03;
 
-// import Module01.ex01.UserIdsGenerator;
-import Module01.ex01.User;
-
 public class Program {
 	public static void main (String [] args){
 
-		TransactionsLinkedList list = new TransactionsLinkedList();
-
-		User sender = new User("oualid", 100);
-		User recipient = new User("khalid", 15);
-
-		Transaction t1 = new Transaction(sender,recipient, TransferCategory.DEBIT, -130);
-
-		sender = new User("obbad", 50);
-		recipient = new User("hicham", 4000);
-
-		Transaction t2 = new Transaction(sender,recipient, TransferCategory.CREDIT, 100);
+		User usr1 = new User("admin", 1200);
+		User usr2 = new User("khalid", 15);
 		
-		sender = new User("hassan", 500);
-		recipient = new User("abdessamad", 1000);
-		Transaction t3 = new Transaction(sender,recipient, TransferCategory.CREDIT, 1900);
+		Transaction t1 = new Transaction(usr1,usr2, TransferCategory.DEBIT, -730);
+		Transaction t2 = new Transaction(usr2,usr1, TransferCategory.CREDIT, 100);
+		Transaction t3 = new Transaction(usr2,usr1, TransferCategory.CREDIT, 200);
 
-		list.addTransaction(t1);
-		list.addTransaction(t2);
-		list.addTransaction(t3);
+		try {
+			usr1.getList().addTransaction(t1);
+			usr1.getList().addTransaction(t2);
+			usr1.getList().addTransaction(t3);
+			// usr1.getList().deleteTransaction(null);
+			
+			Transaction [] arr = usr1.getList().toArray();
 
-		list.deleteTransaction(null);
-		list.deleteTransaction(t3.getIdentifier());
-		Transaction [] arr = list.toArray();
-		for (int i = 0; i < arr.length; i++)
-		{
-			arr[i].printInfo();
+			for (int i = 0; i < arr.length; i++)
+			{
+				arr[i].printInfo();
+			}
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
 		}
+
 	}
 }

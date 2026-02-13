@@ -46,10 +46,8 @@ public class TransactionsLinkedList implements	TransactionsList {
 	public void deleteTransaction(UUID id){
 		List curreNode;
 
-		if (id == null)
-			return ;
-		if (head == null)
-			return ;
+		if (head == null || id == null)
+			throw new TransactionNotFoundException("Id Not Found");
 		size--;
 		if (head == lastNode && id.equals(head.transaction.getIdentifier()))
 		{
@@ -80,6 +78,7 @@ public class TransactionsLinkedList implements	TransactionsList {
 			curreNode = curreNode.next;
 		}
 		size++;
+		throw new TransactionNotFoundException("Id Not Found");
 	}
 
 	@Override
