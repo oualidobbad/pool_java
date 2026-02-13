@@ -17,17 +17,18 @@ public class Program {
 		recipient = new User("hicham", 4000);
 
 		Transaction t2 = new Transaction(sender,recipient, TransferCategory.CREDIT, 100);
+		
+		sender = new User("hassan", 500);
+		recipient = new User("abdessamad", 1000);
+		Transaction t3 = new Transaction(sender,recipient, TransferCategory.CREDIT, 1900);
 
 		list.addTransaction(t1);
 		list.addTransaction(t2);
-		Transaction [] arr = list.toArray();
-		// for (int i = 0; i < arr.length; i++)
-		// {
-		// 	arr[i].printInfo();
-		// }
+		list.addTransaction(t3);
+
 		list.deleteTransaction(null);
-		list.deleteTransaction(t1.getIdentifier());
-		arr = list.toArray();
+		list.deleteTransaction(t3.getIdentifier());
+		Transaction [] arr = list.toArray();
 		for (int i = 0; i < arr.length; i++)
 		{
 			arr[i].printInfo();
