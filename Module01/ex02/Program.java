@@ -8,7 +8,7 @@ public class Program {
         System.out.println("Number of users: " + list.getNumberOfUsers());
         
         try {
-            User user = list.getUserByIndex(5);  // Index 5 has no user
+            User user = list.getUserByIndex(5);
         } catch (IndexOutOfBoundsException e) {
             System.out.println("Correctly caught: " + e.getMessage());
         }
