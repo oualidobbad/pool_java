@@ -1,7 +1,6 @@
 public class Program {
     public static void main(String[] args) {
         UsersArrayList list = new UsersArrayList();
-        
         list.addUser(new User("alice", 12));
         list.addUser(new User("oualid", 100));
         list.addUser(new User("obbad", 300));
