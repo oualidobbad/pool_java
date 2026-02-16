@@ -1,5 +1,3 @@
-package Module01.ex02;
-import Module01.ex01.UserIdsGenerator;
 
 class User {
     private final Integer identifier; 

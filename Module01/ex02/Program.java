@@ -1,6 +1,3 @@
-// Program.java
-package Module01.ex02;
-
 public class Program {
     public static void main(String[] args) {
         UsersArrayList list = new UsersArrayList();

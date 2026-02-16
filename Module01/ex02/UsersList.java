@@ -1,5 +1,3 @@
-package Module01.ex02;
-
 public interface UsersList {
 
 	public void addUser(User usr);
