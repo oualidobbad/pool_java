@@ -7,7 +7,7 @@ public class Program {
 		Transaction t1 = new Transaction(usr1,usr2, TransferCategory.DEBIT, -730);
 		Transaction t2 = new Transaction(usr2,usr1, TransferCategory.CREDIT, 100);
 		Transaction t3 = new Transaction(usr2,usr1, TransferCategory.CREDIT, 200);
-
+		
 		try {
 			usr1.getList().addTransaction(t1);
 			usr1.getList().addTransaction(t2);
