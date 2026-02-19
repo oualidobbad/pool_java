@@ -76,6 +76,9 @@ public class Transaction {
 			this.transferAmount = transferAmount;
 		}
 	}
+	public void setIdentifier(UUID identifier) {
+		this.identifier = identifier;
+	}
 
 	public void printInfo() {
         System.out.println("\n===== TRANSACTION =====");
