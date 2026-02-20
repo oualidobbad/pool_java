@@ -9,6 +9,16 @@ public class Program {
 
 		try {
 			trs.transferTransaction(usr1.getIdentifier(), usr2.getIdentifier(), 100);
+			trs.transferTransaction(usr2.getIdentifier(), usr1.getIdentifier(), 100);
+			Transaction arr [] = trs.getTransactions(usr1.getIdentifier());
+			trs.removeTransaction(usr1.getIdentifier(),arr[0].getIdentifier());
+			arr = trs.getTransactions(usr1.getIdentifier());
+
+			for (int i = 0; i < arr.length; i++)
+			{
+				arr[i].printInfo();
+			}
+
 
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
