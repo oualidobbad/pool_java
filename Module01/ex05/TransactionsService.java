@@ -12,7 +12,9 @@ public class TransactionsService {
     }
 
     public Integer getBalanceUser(Integer id) {
-        return usrList.getUserById(id).getBalance();
+		User user = usrList.getUserById(id);
+		System.out.println(user.getName() + " - "+ user.getBalance());
+        return user.getBalance();
     }
 
     public void transferTransaction(Integer senderId, Integer recipientId, Integer amount) {
@@ -45,29 +47,42 @@ public class TransactionsService {
     }
 
     public Transaction[] checkValidityOfTransactions() {
-        Transaction[] tempUnpaired = new Transaction[1000];
-        int idxOfUnpaired = 0;
+        int count = 0;
 
         for (int i = 0; i < usrList.getNumberOfUsers(); i++) {
             User user = usrList.getUserByIndex(i);
             Transaction[] arrTrans = user.getList().toArray();
-
             for (int j = 0; j < arrTrans.length; j++) {
-                User othUser;
-                if (arrTrans[j].getCategory() == TransferCategory.CREDIT)
-                    othUser = arrTrans[j].getSender();
-                else
-                    othUser = arrTrans[j].getRecipient();
-                Transaction[] arrTransOther = othUser.getList().toArray();
-                boolean ispaired = false;
-                for (int l = 0; l < arrTransOther.length; l++) {
-                    if (arrTransOther[l].getIdentifier().equals(arrTrans[j].getIdentifier()))
-                        ispaired = true;
-                }
-                if (ispaired == false)
-                    tempUnpaired[idxOfUnpaired++] = arrTrans[j];
+                if (!isPaired(arrTrans[j]))
+                    count++;
             }
         }
-        return tempUnpaired;
+
+        Transaction[] unpaired = new Transaction[count];
+        int idx = 0;
+
+        for (int i = 0; i < usrList.getNumberOfUsers(); i++) {
+            User user = usrList.getUserByIndex(i);
+            Transaction[] arrTrans = user.getList().toArray();
+            for (int j = 0; j < arrTrans.length; j++) {
+                if (!isPaired(arrTrans[j]))
+                    unpaired[idx++] = arrTrans[j];
+            }
+        }
+        return unpaired;
+    }
+
+    private boolean isPaired(Transaction tr) {
+        User othUser;
+        if (tr.getCategory() == TransferCategory.CREDIT)
+            othUser = tr.getSender();
+        else
+            othUser = tr.getRecipient();
+        Transaction[] arrTransOther = othUser.getList().toArray();
+        for (int l = 0; l < arrTransOther.length; l++) {
+            if (arrTransOther[l].getIdentifier().equals(tr.getIdentifier()))
+                return true;
+        }
+        return false;
     }
 }

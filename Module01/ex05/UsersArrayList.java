@@ -39,7 +39,7 @@ public class UsersArrayList implements UsersList {
 
 	@Override
 	public User getUserByIndex(Integer index){
-		if (index < 0 && index >= this.index)
+		if (index < 0 || index >= this.index)
 			throw new ArrayIndexOutOfBoundsException();
 		return users[index];
 	}
