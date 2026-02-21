@@ -46,23 +46,27 @@ public class Menu {
 				System.out.println("-------------------------------");
 				return;
 			}
-			if (lineSplited.length != 2) {
-				System.err.println("Invalid input. Enter: <name> <balance> (or 'cancel' to cancel)");
-				continue;
+			try {
+				user = new User(lineSplited[0], Integer.parseInt(lineSplited[1]));
+				service.addUser(user);
+				System.out.println("User with id = " + user.getIdentifier() + " is added");
+				System.out.println("-------------------------------");
+				return;
+			} catch (Exception e) {
+				System.err.println("Invalid input. <name> <balance [number]>  (or 'cancel' to cancel)");
 			}
-			user = new User(lineSplited[0], Integer.parseInt(lineSplited[1]));
-			service.addUser(user);
-			System.out.println("User with id = " + user.getIdentifier() + " is added");
-			System.out.println("-------------------------------");
-			return;
+
+		
 		}
 	}
 
 	private void viewBalance(Scanner sc) {
 		String id;
 		String[] idSplited;
+
+
+		System.out.println("Enter a user ID");
 		while (loopCondition) {
-			System.out.println("Enter a user ID");
 			id = getLine(sc);
 
 			switch (id) {
@@ -88,6 +92,37 @@ public class Menu {
 
 	}
 
+	private void transferAmount(Scanner sc){
+		String line;
+		String lineSplited[];
+
+		System.out.println("Enter a sender ID, a recipient ID, and a transfer amount");
+		while (loopCondition) {
+
+			if ((line = getLine(sc)) == null) {
+				loopCondition = false;
+				sc.close();
+				return;
+			}
+			lineSplited = line.split(" ");
+			if (line.equals("cancel")) {
+				System.out.println("Operation cancelled");
+				System.out.println("-------------------------------");
+				return;
+			}
+			try{
+				service.transferTransaction(Integer.parseInt(lineSplited[0]), Integer.parseInt(lineSplited[1]), Integer.parseInt(lineSplited[2]));
+				System.out.println("The transfer is completed");
+				System.out.println("-------------------------------");
+				return;
+
+			}catch(Exception e){
+				System.err.println("Invalid input. Enter: <sender ID [number]> <recipient ID [number]> amount [number] (or 'cancel' to cancel)");
+			}
+
+		}
+	}
+
 	public void lancerMenu() {
 		Scanner sc;
 		String choice;
@@ -108,7 +143,8 @@ public class Menu {
 						viewBalance(sc);
 						break;
 					case "3":
-						
+						transferAmount(sc);
+						break ;
 					case "7":
 						sc.close();
 						return;
