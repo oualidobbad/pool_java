@@ -26,17 +26,28 @@ public class Menu {
 
 	public void lancerMenu(){
 		Scanner sc;
-		String choice;
+		Integer choice;
 		int balance;
 		String name;
+		User user;
 
 		printMenu();
 		sc = new Scanner(System.in);
-		choice = sc.nextLine();
-		if (choice.equals("1")){
-			name = sc.nextLine();
-			balance = sc.nextInt();
-			service.addUser(new User(name, balance));
+		choice = sc.nextInt();
+		switch (choice){
+			case 1:
+				System.out.println("Enter name and balance:");
+				name = sc.next();
+				balance = sc.nextInt();
+				user = new User(name, balance);
+				service.addUser(user);
+				System.out.println("user with id "+ user.getIdentifier() + " added.");
+				break;
+			case 2:
+
+		}
+		if (choice.equals(1)){
+
 		}
 		sc.close();
 	}
