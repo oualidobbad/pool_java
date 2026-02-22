@@ -1,30 +1,30 @@
+import java.lang.invoke.StringConcatException;
 import java.util.Scanner;
 
 public class Menu {
-	private TransactionsService service;
-	private boolean loopCondition;
-
-	public Menu() {
-		service = new TransactionsService();
-		loopCondition = true;
-	}
+	private TransactionsService service = new TransactionsService();
+	private boolean loopCondition = true;
+	private boolean isDev = false;
 
 	private void printMenu() {
-
 		System.out.println("1. Add a user");
 		System.out.println("2. View user balances");
 		System.out.println("3. Perform a transfer");
-		System.out.println("5. DEV - remove a transfer by ID");
-		System.out.println("6. DEV - check transfer validity");
+		if (isDev){
+			System.out.println("5. DEV - remove a transfer by ID");
+			System.out.println("6. DEV - check transfer validity");
+		}
 		System.out.println("7. Finish execution");
 	}
 
-	private String getLine(Scanner sc) {
+	public void setDev(boolean isDev) {
+		this.isDev = isDev;
+	}
+
+	private String getLine(Scanner sc){
 		System.out.print("-> ");
-		if (!sc.hasNextLine()) {
-			System.out.println("by by by");
-			return null;
-		}
+		if (!sc.hasNextLine())
+			throw new ExitException("by by by");
 		return sc.nextLine().trim();
 	}
 
@@ -35,59 +35,69 @@ public class Menu {
 
 		System.out.println("Enter name and balance:");
 		while (loopCondition) {
-			if ((line = getLine(sc)) == null) {
+			try {
+				line = getLine(sc);
+				if (line.equals("cancel"))
+					throw new StringConcatException("Operation cancelled");
+				lineSplited = line.split(" ");
+				user = new User(lineSplited[0], Integer.parseInt(lineSplited[1]));
+				service.addUser(user);
+				throw new StringConcatException("User with id = " + user.getIdentifier() + " is added");
+			}
+			catch(StringConcatException e){
+				System.out.println(e.getMessage());
+				System.out.println("-------------------------------");
+				return ;
+			}
+			catch(ExitException e){
+				System.out.println(e.getMessage());
 				loopCondition = false;
 				sc.close();
 				return;
 			}
-			lineSplited = line.split(" ");
-			if (line.equals("cancel")) {
-				System.out.println("Operation cancelled");
-				System.out.println("-------------------------------");
-				return;
-			}
-			try {
-				user = new User(lineSplited[0], Integer.parseInt(lineSplited[1]));
-				service.addUser(user);
-				System.out.println("User with id = " + user.getIdentifier() + " is added");
-				System.out.println("-------------------------------");
-				return;
-			} catch (Exception e) {
+			 catch (Throwable t) {
 				System.err.println("Invalid input. <name> <balance [number]>  (or 'cancel' to cancel)");
 			}
 
-		
 		}
 	}
 
 	private void viewBalance(Scanner sc) {
 		String id;
-		String[] idSplited;
-
 
 		System.out.println("Enter a user ID");
 		while (loopCondition) {
-			id = getLine(sc);
-
-			switch (id) {
-				case null:
-					sc.close();
-					loopCondition = false;
-					return;
-				case "cancel":
-					System.out.println("Operation cancelled");
-					System.out.println("-------------------------------");
-					return;
-				default:
-					idSplited = id.split(" ");
-					if (idSplited.length != 1) {
-						System.err.println("Invalid input. Enter: 'cancel' if you want to cancel");
-						continue;
-					}
-					service.getBalanceUser(Integer.parseInt(id));
-					System.out.println("-------------------------------");
-					return;
+			try 
+			{
+				id = getLine(sc);
+				switch (id) 
+				{
+					case "cancel":
+						throw new StringConcatException("Operation cancelled");
+					default:
+						service.getBalanceUser(Integer.parseInt(id));
+						System.out.println("-------------------------------");
+						return ;
+				}
 			}
+			catch(UserNotFoundException e){
+				System.err.println(e.getMessage());
+			}
+			catch(StringConcatException e){
+				System.out.println(e.getMessage());
+				System.out.println("-------------------------------");
+				return;
+			}
+			catch(ExitException e){
+				System.out.println(e.getMessage());
+				loopCondition = false;
+				sc.close();
+				return;
+			}
+			catch (Throwable t) {
+				System.err.println("Invalid input. Enter: 'cancel' if you want to cancel");
+			}
+
 		}
 
 	}
@@ -97,29 +107,38 @@ public class Menu {
 		String lineSplited[];
 
 		System.out.println("Enter a sender ID, a recipient ID, and a transfer amount");
-		while (loopCondition) {
-
-			if ((line = getLine(sc)) == null) {
-				loopCondition = false;
-				sc.close();
-				return;
-			}
-			lineSplited = line.split(" ");
-			if (line.equals("cancel")) {
-				System.out.println("Operation cancelled");
-				System.out.println("-------------------------------");
-				return;
-			}
+		while (loopCondition) 
+		{
 			try{
+				line = getLine(sc);
+				lineSplited = line.split(" ");
+				if (line.equals("cancel")) 
+					throw new StringConcatException("Operation cancelled");
 				service.transferTransaction(Integer.parseInt(lineSplited[0]), Integer.parseInt(lineSplited[1]), Integer.parseInt(lineSplited[2]));
-				System.out.println("The transfer is completed");
+				throw new StringConcatException("The transfer is completed");
+			}
+			catch (ExitException e)
+			{
+				System.err.println(e.getMessage());
+				sc.close();
+				loopCondition = false;
+				return;
+			}
+			catch(StringConcatException e){
+				System.out.println(e.getMessage());
 				System.out.println("-------------------------------");
 				return;
-
-			}catch(Exception e){
+			}
+			catch(UserNotFoundException e){
+				System.err.println(e.getMessage());
+			}
+			catch (IllegalTransactionException e)
+			{
+				System.err.println(e.getMessage());
+			}
+			catch(Throwable t){
 				System.err.println("Invalid input. Enter: <sender ID [number]> <recipient ID [number]> amount [number] (or 'cancel' to cancel)");
 			}
-
 		}
 	}
 
@@ -133,9 +152,6 @@ public class Menu {
 			try {
 				choice = getLine(sc);
 				switch (choice) {
-					case null:
-						sc.close();
-						return;
 					case "1":
 						addUser(sc);
 						break;
@@ -146,13 +162,19 @@ public class Menu {
 						transferAmount(sc);
 						break ;
 					case "7":
-						sc.close();
-						return;
+						throw new ExitException("you are close the application");
 					default:
-						System.out.println("Commande Not Found!");
+						throw new StringConcatException("Commande Not Found!");
 				}
-			} catch (Exception e) {
+			}
+			catch(StringConcatException e)
+			{
 				System.out.println(e.getMessage());
+			}
+			catch(ExitException e){
+				System.out.println(e.getMessage());
+				sc.close();
+				return;
 			}
 		}
 	}

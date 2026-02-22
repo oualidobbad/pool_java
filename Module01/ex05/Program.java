@@ -1,11 +1,8 @@
 public class Program {
 	public static void main(String[] args) {
 		Menu menu = new Menu();
-		try{
-			menu.lancerMenu();
-		}catch(Exception e)
-		{
-			System.out.println(e.getMessage());
-		}
+		if (args.length > 0 && args[0].equals("--profile=dev"))
+			menu.setDev(true);
+		menu.lancerMenu();
 	}
 }
