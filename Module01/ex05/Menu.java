@@ -1,10 +1,12 @@
 import java.lang.invoke.StringConcatException;
 import java.util.Scanner;
+import java.util.UUID;
 
 public class Menu {
 	private TransactionsService service = new TransactionsService();
 	private boolean loopCondition = true;
 	private boolean isDev = false;
+	// Scanner sc = new Scanner(System.in);
 
 	private void printMenu() {
 		System.out.println("1. Add a user");
@@ -141,10 +143,91 @@ public class Menu {
 			}
 		}
 	}
+	
+	private void viewAllTransaction(Scanner sc)
+	{
+		Transaction [] transactions;
+		String line;
 
+		System.out.println("Enter a user ID");
+
+		while (loopCondition) {
+			try {
+				line = getLine(sc);
+				if (line.equals("cancel"))
+					throw new StringConcatException("operation cancelled");
+				transactions = service.getTransactions(Integer.parseInt(line));
+				// To Mike(id = 2) -100 with id = cc128842-2e5c-4cca-a44c-7829f53fc31f
+				for (int i = 0; i < transactions.length; i++)
+				{
+					User recipient = transactions[i].getRecipient();
+					System.out.print("To " + recipient.getName() + "(id = " + recipient.getIdentifier());
+					System.out.println(") -" + transactions[i].getTransferAmount() + " with id = " + transactions[i].getIdentifier());
+				}
+				System.out.println("-------------------------------");
+			} 
+			catch(UserNotFoundException e){
+				System.err.println(e.getMessage());
+			}
+			catch(StringConcatException e){
+				System.out.println(e.getMessage());
+				System.out.println("-------------------------------");
+				return;
+			}
+			catch(ExitException e){
+				System.out.println(e.getMessage());
+				loopCondition = false;
+				sc.close();
+				return;
+			}
+			catch (Throwable t) {
+				System.err.println("Invalid input. Enter: 'cancel' if you want to cancel");
+			}
+		}
+		
+	}
+	private void removeTransfer(Scanner sc)
+	{	
+		String line;
+		String lineSplited[];
+		System.out.println("Enter a user ID and a transfer ID");
+
+		while (loopCondition) {
+			try {
+				line = getLine(sc);
+				if (line.equals("cancel"))
+					throw new StringConcatException("Operation cancelled");
+				lineSplited = line.split(" ");
+				service.removeTransaction(Integer.parseInt(lineSplited[0]), UUID.fromString(lineSplited[0]));
+				return ;
+			}
+			catch (ExitException e)
+			{
+				System.err.println(e.getMessage());
+				sc.close();
+				loopCondition = false;
+				return;
+			}
+			catch(StringConcatException e){
+				System.out.println(e.getMessage());
+				System.out.println("-------------------------------");
+				return;
+			}
+			catch(UserNotFoundException e){
+				System.err.println(e.getMessage());
+			}
+			catch (TransactionNotFoundException e)
+			{
+				System.err.println(e.getMessage());
+			}
+			catch(Throwable t){
+				System.err.println("Invalid input. Enter: <sender ID [number]> <recipient ID [number]> amount [number] (or 'cancel' to cancel)");
+			}
+		}
+	}
 	public void lancerMenu() {
 		Scanner sc;
-		String choice;
+		String choice = null;
 
 		sc = new Scanner(System.in);
 		while (loopCondition) {
@@ -161,6 +244,12 @@ public class Menu {
 					case "3":
 						transferAmount(sc);
 						break ;
+					case "4":
+
+						break ;
+					case "5":
+						removeTransfer(sc);
+						break;
 					case "7":
 						throw new ExitException("you are close the application");
 					default:
@@ -176,6 +265,7 @@ public class Menu {
 				sc.close();
 				return;
 			}
+
 		}
 	}
 }

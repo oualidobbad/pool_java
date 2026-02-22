@@ -46,7 +46,7 @@ public class TransactionsLinkedList implements	TransactionsList {
 		List curreNode;
 
 		if (head == null || id == null)
-			throw new TransactionNotFoundException("Id Not Found");
+			throw new TransactionNotFoundException("Transaction Not Found");
 		size--;
 		if (head == lastNode && id.equals(head.transaction.getIdentifier()))
 		{
@@ -77,7 +77,7 @@ public class TransactionsLinkedList implements	TransactionsList {
 			curreNode = curreNode.next;
 		}
 		size++;
-		throw new TransactionNotFoundException("Id Not Found");
+		throw new TransactionNotFoundException("Transaction Not Found");
 	}
 
 	@Override
@@ -90,5 +90,16 @@ public class TransactionsLinkedList implements	TransactionsList {
 			currList = currList.next;
 		}
 		return arr;
+	}
+	@Override
+	public Transaction geTransaction(UUID id)
+	{
+		List curreNode = head;
+		while (curreNode != null) {
+			if (id.equals(curreNode.transaction.getIdentifier()))
+				return curreNode.transaction;
+			curreNode = curreNode.next;
+		}
+		throw new TransactionNotFoundException("transaction not found");
 	}
 }

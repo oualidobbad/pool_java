@@ -42,8 +42,15 @@ public class TransactionsService {
 
     public void removeTransaction(Integer userId, UUID transactionId) {
         User user = usrList.getUserById(userId);
+		Transaction tr = user.getList().geTransaction(transactionId);
         user.getList().deleteTransaction(transactionId);
 
+		if (tr.getSender().getIdentifier().equals(user.getIdentifier()))
+			System.out.println("Transfer To " + tr.getRecipient() + "(id = " + tr.getRecipient().getIdentifier() + ") " + tr.getTransferAmount() + " remove");
+		else
+			System.out.println("Transfer To " + tr.getSender() + "(id = " + tr.getSender().getIdentifier() + ") " + tr.getTransferAmount() + " remove");
+		System.out.println("-------------------------------");
+		// Transfer To Mike(id = 2) 150 remove
     }
 
     public Transaction[] checkValidityOfTransactions() {
