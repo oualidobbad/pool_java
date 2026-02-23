@@ -1,0 +1,7 @@
+package com.transactions.core;
+
+public class StatusOperation extends RuntimeException {
+	public StatusOperation(String message){
+		super(message);
+	}
+}
