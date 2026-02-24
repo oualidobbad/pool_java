@@ -55,6 +55,10 @@
                 <version>0.0.8</version>
                 <configuration>
                     <mainClass>${fxMainClass}</mainClass>
+                    <options>
+                        <option>-Dprism.lcdtext=false</option>
+                        <option>-Dprism.text=t2k</option>
+                    </options>
                 </configuration>
             </plugin>
 
