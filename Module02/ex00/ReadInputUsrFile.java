@@ -5,7 +5,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.lang.invoke.StringConcatException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,41 +14,60 @@ public class ReadInputUsrFile {
 	String file = "Signature.txt";
 	private boolean isPArseSignature = false;
 	private OutputStream result;
+	private int signatureMaxLen = 0;
 
 	public ReadInputUsrFile() throws IOException{
 		result = new FileOutputStream("result.txt") ;
 	}
 
-	public void parseSignature() throws IOException, IndexOutOfBoundsException {
-			BufferedReader fileReader = new BufferedReader(new FileReader(file));
-			String line;
-			String lineSpl[];
-			while ((line = fileReader.readLine()) != null) {
-				lineSpl = line.split(",");
-				map.put(lineSpl[1].trim(), lineSpl[0].trim());
-			}
+	public void parseSignature() throws IOException, IndexOutOfBoundsException 
+	{
+		if (isPArseSignature)
+			return ;
+		BufferedReader fileReader = new BufferedReader(new FileReader(file));
+		String line;
+		String lineSpl[];
+		while ((line = fileReader.readLine()) != null) {
+			lineSpl = line.split(",");
+
+			if (lineSpl[1].length() > signatureMaxLen)
+				signatureMaxLen = lineSpl[1].length();
+			map.put(lineSpl[1].trim(), lineSpl[0].trim());
+		}
+		isPArseSignature = true;
 	}
 
 	public void typeSignature(String fileUsrInput) throws Exception {
 
 		InputStream in = new FileInputStream(fileUsrInput);
-		byte[] buffer = new byte[8];
-		int bytesRead = in.read(buffer);
-		String eightByte = "";
+		byte[] buffer;
+		String sig;
 
-		if (!isPArseSignature)
+		parseSignature();
+		buffer = new byte[signatureMaxLen];
+		in.read(buffer);
+		sig = null;
+
+		for (Map.Entry<String, String> entry : map.entrySet() )
 		{
-			parseSignature();
-			isPArseSignature = true;
+			String [] key = entry.getKey().split(" ");
+			boolean isFound = true;
+
+			for (int i = 0; i < key.length; i++) {
+				if (!key[i].equals(String.format("%02X ", buffer[i]).trim())){
+					isFound = false;
+					break ;
+				}
+			}
+			if (isFound)
+			{
+				sig = entry.getValue();
+				break ;
+			}
 		}
-		for (int i = 0; i < bytesRead; i++) {
-			eightByte += String.format("%02X ", buffer[i]);
-		}
-		System.out.println(eightByte);
-		String value = map.get(eightByte.trim());
-		if (value == null)
+		if (sig == null)
 			throw new KeyNotFound("UNDEFINED");
-		result.write(value.getBytes());
+		result.write(sig.getBytes());
 		result.write("\n".getBytes());
 		System.out.println("PROCESSED");
 	}
