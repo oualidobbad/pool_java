@@ -9,8 +9,8 @@ public class Main {
 			sizeArr = Integer.parseInt(args[0].trim().split("=")[1]);
 			threadsCount =  Integer.parseInt(args[1].trim().split("=")[1]);
 
-			System.out.println(sizeArr);
-			System.out.println(threadsCount);
+			RealMultithreading.setThreadsCount(threadsCount);
+			System.out.println(RealMultithreading.getThreadsCount());
 		}
 		catch (ArrayIndexOutOfBoundsException e){
 			System.err.println("Error: check args");
