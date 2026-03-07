@@ -7,7 +7,6 @@ import java.util.Scanner;
 
 public class Main {
 
-    // Detect if URL needs yt-dlp or direct download
     static boolean isComplexURL(String url) {
         return url.contains("youtube.com") || 
                url.contains("youtu.be") ||
@@ -16,8 +15,6 @@ public class Main {
                url.contains("facebook.com") ||
                url.contains("tiktok.com");
     }
-
-    // Direct download (your Level 2 code)
     static void directDownload(String url) throws Exception {
         int indexLastSlash = url.lastIndexOf('/');
         String nameFile = url.substring(indexLastSlash + 1);
@@ -38,10 +35,7 @@ public class Main {
                 outStream.write(buffer, 0, bytesRead);
                 totalDownloaded += bytesRead;
                 double percentage = (totalDownloaded * 100) / (double) conn.getContentLength();
-                int filled = (int) (percentage / 100 * 20);
-                int empty = 20 - filled;
-                String bar = "█".repeat(filled) + "░".repeat(empty);
-                System.out.print("\rDownloading... [" + bar + "] " + (int) percentage + "%");
+                System.out.print("\r" + (int) percentage + "%");
             }
         }
 
@@ -49,24 +43,19 @@ public class Main {
         conn.disconnect();
     }
 
-    // yt-dlp download (Level 3)
     static void ytDlpDownload(String url) throws Exception {
-        System.out.println("Detected complex URL, using yt-dlp...");
 
-        ProcessBuilder pb = new ProcessBuilder("sh", "yt-dlp/yt-dlp.sh", url);
-        pb.redirectErrorStream(true);
-
+        ProcessBuilder pb = new ProcessBuilder("yt-dlp", url);
         Process process = pb.start();
 
-        // Read and show yt-dlp output
         InputStream in = process.getInputStream();
         Scanner scanner = new Scanner(in);
         while (scanner.hasNextLine()) {
-            System.out.println(scanner.nextLine());
+            System.out.print("\r" + scanner.nextLine());
         }
 
         process.waitFor();
-        System.out.println("Download complete!");
+        System.out.println("\nDownload complete!");
     }
 
     public static void main(String[] args) {
@@ -75,7 +64,6 @@ public class Main {
             System.out.print("-> ");
             String line = scanner.nextLine();
 
-            // Detect URL type and choose download method
             if (isComplexURL(line)) {
                 ytDlpDownload(line);
             } else {
