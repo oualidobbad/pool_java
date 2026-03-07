@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- activity_main.xml — The one and only screen of our Downloader app.
+     LAYOUT OVERVIEW:
+     ┌──────────────────────────────┐
+     │  Title "Simple Downloader"   │
+     │  [  URL input field       ]  │
+     │  [    Download Button     ]  │
+     │  ████████░░░░ 45%            │
+     │  Status: Downloading...      │
+     └──────────────────────────────┘
+-->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:gravity="center_horizontal">
+
+    <!-- ============ TITLE ============ -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Simple Downloader"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="24dp" />
+
+    <!-- ============ URL INPUT ============ -->
+    <!-- The user pastes a direct file URL here (e.g. https://example.com/file.zip) -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Paste download URL">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editTextUrl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textUri"
+            android:singleLine="true" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- ============ DOWNLOAD BUTTON ============ -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/buttonDownload"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Download"
+        android:layout_marginTop="16dp"
+        android:textSize="16sp" />
+
+    <!-- ============ PROGRESS BAR ============ -->
+    <!-- Horizontal progress bar: 0–100%. Hidden until a download starts. -->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:max="100"
+        android:progress="0"
+        android:visibility="gone" />
+
+    <!-- ============ PERCENTAGE TEXT ============ -->
+    <TextView
+        android:id="@+id/textPercent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0%"
+        android:textSize="16sp"
+        android:layout_marginTop="8dp"
+        android:visibility="gone" />
+
+    <!-- ============ STATUS TEXT ============ -->
+    <!-- Shows messages like "Downloading…", "Complete!", error messages, file path -->
+    <TextView
+        android:id="@+id/textStatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textSize="14sp"
+        android:layout_marginTop="16dp"
+        android:gravity="center" />
+
+</LinearLayout>
