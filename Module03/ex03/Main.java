@@ -1,25 +1,45 @@
 
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.net.URI;
+import java.util.ArrayDeque;
+import java.util.Queue;
+import java.net.URL;
 
 public class Main {
-    public static void main(String[] args) {
-        try {
-            URI uri = URI.create("https://cdn.pixabay.com/video/2026/02/15/334716_large.mp4");
+	static Queue<URL> parseFileUrls() {
+		
+		Queue<URL> queue = new ArrayDeque<>();
+		try (
+			BufferedReader in = new BufferedReader(new FileReader("files_urls.txt")))
+			{
+			String line;
+			while ((line = in.readLine()) != null) {
+				queue.add(URI.create(line).toURL());
+			}
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		return queue;
+	}
 
-            try (InputStream in = uri.toURL().openStream();
-				OutputStream outStream = new FileOutputStream("here.mp4")) 
-				{
-					byte buffer[] = new byte[4096];
-					int bytesRead;
-					while ((bytesRead = in.read(buffer)) != -1) {
-						outStream.write(buffer, 0, bytesRead);
-					}
-				}
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
+	public static void main(String[] args) {
+		try {
+			if (args.length == 0 || !args[0].split("=")[0].equals("--threadsCount"))
+				throw new IllegalArgumentException("args must be {--threadsCount=nb}");
+
+			int N = Integer.parseInt(args[0].split("=")[1].trim());
+			Thread [] threads = new Thread[N];
+			for (int i = 0; i < N; i++){
+				threads[i] = new DownloaderTasks();
+				threads[i].start();
+			}
+			for (int i = 0; i < N; i++){
+				threads[i].join();
+			}
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
 	}
 }
