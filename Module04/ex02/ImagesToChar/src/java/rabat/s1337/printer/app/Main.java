@@ -1,14 +1,32 @@
 package rabat.s1337.printer.app;
 import rabat.s1337.printer.logic.ImageConverter;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.Parameters;
+import com.beust.jcommander.JCommander;
+import java.awt.Color;
+import java.io.FileInputStream;
 
 public class Main {
+
+	@Parameters(separators = "=")
+	static class Argument{
+		@Parameter(names = "--white", required = true, converter = StringToColor.class, description = "Color to reprsent white color")
+		public Color white;
+		@Parameter(names = "--black", converter = StringToColor.class, required = true, description = "Color of represent black color")
+		public Color black;
+
+	}
+
 	public static void main(String[] args) {
 		try {
-			if (args.length != 2 || (args[0].length() != 1 || args[1].length() != 1))
-				throw new IllegalArgumentException("args must {[char Of White Color] [char Of Black Color] }");
-			
-			ImageConverter imageConverter = new ImageConverter(Main.class.getResourceAsStream("/resources/it_black.bmp"), args[0].charAt(0), args[1].charAt(0));
-			imageConverter.converter();
+			Argument arg = new Argument();
+			JCommander jc = new JCommander(arg);
+			jc.parse(args);
+
+//			System.out.println(arg.white);
+//			System.out.println(arg.black);
+			 ImageConverter imageConverter = new ImageConverter(new FileInputStream("/home/oualid/Documents/pool_java/Module04/ex02/ImagesToChar/src/resources/it_black.bmp"), arg.white, arg.black);
+			 imageConverter.converter();
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}

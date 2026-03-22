@@ -1,1 +1,4 @@
 Main-Class: rabat.s1337.printer.app.Main
+Class-Path: lib/jcommander-1.82.jar
+Class-Path: lib/JCDP-4.0.2.jar
+

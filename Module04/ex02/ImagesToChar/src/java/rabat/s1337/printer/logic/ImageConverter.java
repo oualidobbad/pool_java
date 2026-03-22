@@ -3,23 +3,29 @@ package rabat.s1337.printer.logic;
 import javax.imageio.ImageIO;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
-import java.io.InputStream; 
+import java.io.InputStream;
+import com.diogonunes.jcdp.color.*;
+import com.diogonunes.jcdp.color.api.Ansi.FColor;
+import com.diogonunes.jcdp.color.api.Ansi.BColor;
+import com.diogonunes.jcdp.color.api.Ansi.Attribute;
 
 public class ImageConverter {
 	private final Color WHITE_COLOR = new Color(200, 200, 200);
-	private char charOfWhite;
-	private char charOfBlack;
+	private Color colorOfWhite;
+	private Color colorOfBlack;
 
 	private InputStream pathOfImage;
 
-	public ImageConverter(InputStream pathOfImage, char charOfWhite, char charOfBlack) {
+	public ImageConverter(InputStream pathOfImage,  Color colorOfWhite, Color colorOfBlack) {
 		this.pathOfImage = pathOfImage;
-		this.charOfWhite = charOfWhite;
-		this.charOfBlack = charOfBlack;
+		this.colorOfBlack = colorOfBlack;
+		this.colorOfWhite = colorOfWhite;
 	}
 
 	public void converter() throws Exception {
 		BufferedImage image = ImageIO.read(pathOfImage);
+		ColoredPrinter cp = new ColoredPrinter();
+
 		int height = image.getHeight();
 		int width = image.getWidth();
 
@@ -28,9 +34,9 @@ public class ImageConverter {
 				int color = image.getRGB(x, y);
 
 				if (color >= WHITE_COLOR.getRGB())
-					System.out.print(charOfWhite);
-				else 
-					System.out.print(charOfBlack);
+					cp.print(" ", Attribute.NONE, FColor.NONE, ColorMapping.toBColor(colorOfWhite));
+				else
+					cp.print(" ", Attribute.NONE, FColor.NONE, ColorMapping.toBColor(colorOfBlack));
 			}
 			System.out.println();
 		}
