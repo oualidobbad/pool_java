@@ -8,8 +8,7 @@ public class Chatroom {
     private String name;
     private User onwer;
     private List<Message> messages;
-
-    //getters
+    //getters	
     public Long getId() {
         return id;
     }

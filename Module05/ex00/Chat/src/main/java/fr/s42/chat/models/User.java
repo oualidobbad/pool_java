@@ -8,8 +8,7 @@ public class User {
     private String password;
     private List<Chatroom> createdRooms;
     private List<Chatroom> socializedRooms;
-
-
+	
     // getters 
     public Long getId() {
         return id;
@@ -43,7 +42,7 @@ public class User {
     public void setSocializedRooms(List<Chatroom> socializedRooms) {
         this.socializedRooms = socializedRooms;
     }
-
+	
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
