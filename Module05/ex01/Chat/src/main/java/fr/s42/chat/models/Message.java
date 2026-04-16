@@ -47,7 +47,7 @@ public class Message {
 	}
 	@Override
 	public String toString() {
-		return "id: "+id+", author: "+author+", room: "+room+", text: "+text+", date: " +dateTime;
+		return "id: "+id+", author: "+author.toString()+", room: "+room.toString()+", text: "+text+", date: " +dateTime;
 	}
 	@Override
 	public boolean equals(Object obj) {
